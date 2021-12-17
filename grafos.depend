@@ -5,7 +5,7 @@
 
 1638983040 d:\github\grafos\edge.h
 
-1639623581 source:d:\github\grafos\graph.cpp
+1639756644 source:d:\github\grafos\graph.cpp
 	"Graph.h"
 	"Node.h"
 	"Edge.h"
@@ -20,8 +20,9 @@
 	<float.h>
 	<iomanip>
 	<iterator>
+	<limits>
 
-1639604472 d:\github\grafos\graph.h
+1639756509 d:\github\grafos\graph.h
 	"Node.h"
 	<fstream>
 	<stack>
@@ -35,7 +36,7 @@
 	"Edge.h"
 	<iostream>
 
-1639604396 source:d:\github\grafos\main.cpp
+1639756389 source:d:\github\grafos\main.cpp
 	<iostream>
 	<fstream>
 	<string>
@@ -47,4 +48,5 @@
 	<chrono>
 	"Graph.h"
 	"Node.h"
+	<limits>
 

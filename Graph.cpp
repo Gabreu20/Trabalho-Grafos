@@ -12,6 +12,7 @@
 #include <float.h>
 #include <iomanip>
 #include <iterator>
+#include <limits>
 
 using namespace std;
 
@@ -299,8 +300,8 @@ void Graph::breadthFirstSearch(ofstream &output_file)
 {
     Node *n = this->first_node;
     list<int> fila;
-    fila.push_front(n->getId());
-    while(fila.size()>0){
+    fila.push_back(n->getId());
+    while(!fila.empty()){
 
         n = this->getNode(fila.front());
         fila.pop_front();
@@ -312,12 +313,13 @@ void Graph::breadthFirstSearch(ofstream &output_file)
             while(e != nullptr){
                 Node* target = getNode(e->getTargetId());
                 if(target->visitado == 0){
-                    fila.push_front(target->getId());
+                    fila.push_back(target->getId());
                 }
                 e = e->getNextEdge();
             }
         }
     }
+    cout << endl;
 }
 
 
@@ -329,9 +331,96 @@ float Graph::floydMarshall(int idSource, int idTarget)
 
 
 
+void Graph::dijkstraAux(int nos[],int tamanho,int remocao)
+{
+    for(int i=remocao; i<tamanho; i++)
+    {
+        nos[i]=nos[i+1];
+    }
+}
+
+
 float Graph::dijkstra(int idSource, int idTarget)
 {
+    int tamanho=order;
+    int nos[order];
+    float menorCaminho[order];
 
+    int total=0;
+    int NosFinal[order];
+    float Menor[order];
+
+    for(int i=0; i<order; i++)
+    {
+        menorCaminho[i]=numeric_limits<float>::infinity();
+    }
+
+    for(int i=1; i<=tamanho; i++)
+    {
+        nos[i-1]=i;
+    }
+
+    menorCaminho[idSource-1]=0;
+
+    NosFinal[total]=idSource;
+    Menor[total]=0;
+    total++;
+
+    dijkstraAux(nos,tamanho,idSource-1);
+    tamanho--;
+
+    Node *next_node=getNode(idSource);
+    Edge *next_edge=next_node->getFirstEdge();
+
+    while(next_edge!=nullptr)
+    {
+        menorCaminho[next_edge->getTargetId()-1]=next_edge->getWeight();
+        next_edge=next_edge->getNextEdge();
+    }
+    int Existe=0;
+    while(tamanho!=0)
+    {
+        int j=0;
+        for(int i=0; i<tamanho; i++)
+        {
+            if(menorCaminho[j]>menorCaminho[i])
+            {
+                for(int p=0; p<tamanho; p++)
+                {
+                    if(nos[p]==i+1)
+                    {
+                        Existe = 1;
+                        break;
+                    }
+
+                }
+                if(Existe==1)
+                    j=i;
+                Existe = 0;
+            }
+            dijkstraAux(nos,tamanho,j);
+            tamanho--;
+
+            Node *next_node=getNode(nos[j]);
+            Edge *next_edge=next_node->getFirstEdge();
+
+
+            while(next_edge!=nullptr)
+            {
+                if(menorCaminho[next_edge->getTargetId()-1]>next_edge->getWeight()+menorCaminho[nos[j]-1])
+                    menorCaminho[next_edge->getTargetId()-1]=next_edge->getWeight()+menorCaminho[nos[j]-1];
+                next_edge=next_edge->getNextEdge();
+            }
+
+        }
+        /*for(int i=0; i<order; i++)
+        {
+            cout << menorCaminho[i] << " " << endl;
+        }
+        cout << endl;*/
+        if(tamanho==1)
+            return menorCaminho[idTarget-1];
+    }
 }
 
 //function that prints a topological sorting

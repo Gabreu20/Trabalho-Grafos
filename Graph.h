@@ -60,6 +60,7 @@ class Graph{
         void imprimir();
 
     private:
+        void dijkstraAux(int nos[],int tamanho,int remocao);
         Graph* questaoAaux(int id,Graph *graphAnswer);
         void addNode(Node *Id);
         //Auxiliar methods
