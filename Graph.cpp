@@ -370,36 +370,33 @@ float Graph::dijkstra(int idSource, int idTarget)
     int tamanho=order;
     int nos[order];
     float menorCaminho[order];
-
     int total=0;
-    int NosFinal[order];
-    float Menor[order];
+    Node *MelhorSequencia[order];
+
+    for(int i=0; i<order; i++)
+    {
+        MelhorSequencia[i] = new Node(idSource);
+    }
 
     for(int i=0; i<order; i++)
     {
         menorCaminho[i]=numeric_limits<float>::infinity();
     }
 
-    for(int i=1; i<=tamanho; i++)
+    for(int i=0; i<tamanho; i++)
     {
-        nos[i-1]=i;
+        nos[i]=i;
     }
 
-    menorCaminho[idSource-1]=0;
-
-    NosFinal[total]=idSource;
-    Menor[total]=0;
-    total++;
-
-    dijkstraAux(nos,tamanho,idSource-1);
+    menorCaminho[idSource]=0;
+    dijkstraAux(nos,tamanho,idSource);
     tamanho--;
-
     Node *next_node=getNode(idSource);
     Edge *next_edge=next_node->getFirstEdge();
 
     while(next_edge!=nullptr)
     {
-        menorCaminho[next_edge->getTargetId()-1]=next_edge->getWeight();
+        menorCaminho[next_edge->getTargetId()]=next_edge->getWeight();
         next_edge=next_edge->getNextEdge();
     }
     int Existe=0;
@@ -432,20 +429,21 @@ float Graph::dijkstra(int idSource, int idTarget)
 
             while(next_edge!=nullptr)
             {
-                if(menorCaminho[next_edge->getTargetId()-1]>next_edge->getWeight()+menorCaminho[nos[j]-1])
-                    menorCaminho[next_edge->getTargetId()-1]=next_edge->getWeight()+menorCaminho[nos[j]-1];
+                if(menorCaminho[next_edge->getTargetId()]>next_edge->getWeight()+menorCaminho[nos[j]])
+                {
+                    menorCaminho[next_edge->getTargetId()]=next_edge->getWeight()+menorCaminho[nos[j]];
+                }
+
                 next_edge=next_edge->getNextEdge();
             }
 
         }
-        /*for(int i=0; i<order; i++)
-        {
-            cout << menorCaminho[i] << " " << endl;
-        }
-        cout << endl;*/
         if(tamanho==1)
-            return menorCaminho[idTarget-1];
+        {
+            return menorCaminho[idTarget];
+        }
     }
+    return 0;
 }
 
 //function that prints a topological sorting
@@ -478,9 +476,11 @@ Graph* getVertexInduced(int* listIdNodes)
 
 }
 
-Graph* Graph::agmKuskal()//PRECISA VERIRIFICAR SE FECHA CICLO AINDA
+Graph* Graph::agmKuskal()//FUNCIONANDO XD
 {
     vector<int> arestas;
+    vector<int> nodes;
+
     Edge *edges[this->getNumberEdges()];
 
     Node *n = this->getFirstNode();
@@ -497,17 +497,58 @@ Graph* Graph::agmKuskal()//PRECISA VERIRIFICAR SE FECHA CICLO AINDA
     }
     sort(arestas.begin(), arestas.end());
 
-    for(int i = 0; i < arestas.size(); i++){
-        for(int j = 0; j < 10; j++){
-            if(arestas.at(i) == edges[j]->getWeight()){
-                cout << "|";
-                cout << edges[j]->getSource();
-                arestas.erase(arestas.begin() + i);
-                cout << "-" << edges[j]->getTargetId();
-                cout << "|";
+    /*
+    for(int i = 0; i < this->number_edges; i++){
+        for(int j = 0; j < arestas.size(); j++){
+            if(edges[i]->getWeight() == arestas.at(j)){
+                nodes.push_back(edges[i]->getSource());
+                nodes.push_back(edges[i]->getTargetId());
+                arestas.erase(arestas.begin() + j);
+            }
+        }
+    }*/
+
+    for(int i = 0; i < number_edges; i++){
+        for(int j = 0; j < number_edges; j++){
+            if(edges[j]->getWeight() == arestas.at(0)){
+                nodes.push_back(edges[j]->getSource());
+                nodes.push_back(edges[j]->getTargetId());
+                arestas.erase(arestas.begin());
+                if(arestas.size() == 0)
+                    arestas.push_back(0);
             }
         }
     }
+
+    Graph *g = new Graph(order,directed,weighted_edge,weighted_node);
+
+    for(int x : nodes)
+        cout << x << " ";
+
+    for(int i=0; i<order; i++)
+    {
+        g->insertNode(i);
+    }
+
+    g->getFirstNode()->pai = g->getFirstNode()->getId();
+
+    int j = 1;
+    for(int i = 0; i < nodes.size(); i = i + 2){
+        Node *pai = g->getNode(nodes.at(i));
+        Node *filho = g->getNode(nodes.at(i+1));
+        if(filho->pai == -1){
+            filho->pai = pai->pai;
+            g->insertEdge(pai->getId(),filho->getId(),0,j);
+        }
+        else{
+            if(filho->pai != pai->pai){
+                filho->pai = pai->pai;
+                g->insertEdge(pai->getId(),filho->getId(),0,j);
+            }
+        }
+        j++;
+    }
+    g->imprimir();
 }
 
 Graph* agmPrim()

@@ -46,7 +46,7 @@ Graph* leitura(ifstream& input_file, int directed, int weightedEdge, int weighte
         float edgeWeight;
         for(int i=0; i<order; i++)
         {
-            graph->insertNode(i+1);
+            graph->insertNode(i);
         }
 
         while(input_file >> idNodeSource >> idNodeTarget >> edgeWeight)
@@ -112,7 +112,7 @@ Graph* leituraInstancia(ifstream& input_file, int directed, int weightedEdge, in
     //adciona todos os indicies
     for(int i=0; i<order; i++)
     {
-        graph->insertNode(i+1);
+        graph->insertNode(i);
     }
 
 

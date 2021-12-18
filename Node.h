@@ -15,12 +15,12 @@ class Node{
     private:
 
 
-
     public:
         //meu pecado
         Edge* first_edge;
         Edge* last_edge;
         int id;
+        int pai = -1;
         unsigned int in_degree;
         unsigned int out_degree;
         float weight;
