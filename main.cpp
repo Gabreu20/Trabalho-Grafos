@@ -28,20 +28,21 @@ Graph* leitura(ifstream& input_file, int directed, int weightedEdge, int weighte
 
     //Leitura de arquivo
 
+    int edge_id = 1;
     if(!graph->getWeightedEdge() && !graph->getWeightedNode())
     {
-
+        cout << "1";
         while(input_file >> idNodeSource >> idNodeTarget)
         {
-
-            graph->insertEdge(idNodeSource, idNodeTarget, 0);
-
+            graph->insertEdge(idNodeSource, idNodeTarget, 0, edge_id);
+            edge_id++;
         }
 
     }
     else if(graph->getWeightedEdge() && !graph->getWeightedNode() )
     {
 
+        cout << 2;
         float edgeWeight;
         for(int i=0; i<order; i++)
         {
@@ -51,41 +52,44 @@ Graph* leitura(ifstream& input_file, int directed, int weightedEdge, int weighte
         while(input_file >> idNodeSource >> idNodeTarget >> edgeWeight)
         {
 
-            graph->insertEdge(idNodeSource, idNodeTarget, edgeWeight);
-
+            graph->insertEdge(idNodeSource, idNodeTarget, edgeWeight, edge_id);
+            edge_id++;
         }
 
     }
     else if(graph->getWeightedNode() && !graph->getWeightedEdge())
     {
 
+        cout << 3;
         float nodeSourceWeight, nodeTargetWeight;
 
         while(input_file >> idNodeSource >> nodeSourceWeight >> idNodeTarget >> nodeTargetWeight)
         {
 
-            graph->insertEdge(idNodeSource, idNodeTarget, 0);
+            graph->insertEdge(idNodeSource, idNodeTarget, 0, edge_id);
             graph->getNode(idNodeSource)->setWeight(nodeSourceWeight);
             graph->getNode(idNodeTarget)->setWeight(nodeTargetWeight);
-
+            edge_id++;
         }
 
     }
     else if(graph->getWeightedNode() && graph->getWeightedEdge())
     {
-
+        cout << 4;
         float nodeSourceWeight, nodeTargetWeight, edgeWeight;
 
         while(input_file >> idNodeSource >> nodeSourceWeight >> idNodeTarget >> nodeTargetWeight)
         {
 
-            graph->insertEdge(idNodeSource, idNodeTarget, edgeWeight);
+            graph->insertEdge(idNodeSource, idNodeTarget, edgeWeight, edge_id);
             graph->getNode(idNodeSource)->setWeight(nodeSourceWeight);
             graph->getNode(idNodeTarget)->setWeight(nodeTargetWeight);
-
+            edge_id++;
         }
 
     }
+
+    graph->setFirstEdge(graph->getFirstNode()->getFirstEdge());
 
     return graph;
 }
@@ -116,9 +120,11 @@ Graph* leituraInstancia(ifstream& input_file, int directed, int weightedEdge, in
     while(input_file >> idNodeSource >> idNodeTarget)
     {
 
-        graph->insertEdge(idNodeSource, idNodeTarget, 0);
+        graph->insertEdge(idNodeSource, idNodeTarget, 0, graph->getNumberEdges());
 
     }
+
+    graph->setFirstEdge(graph->getFirstNode()->getFirstEdge());
 
     return graph;
 }
@@ -155,14 +161,12 @@ void selecionar(int selecao, Graph* graph, ofstream& output_file)
     {
 
     //Subgrafo induzido por um conjunto de vértices X;
-
     case 1:
     {
         int no;
         cout << "insira o valor para o subgrafo vértice-induzido pelo fecho transitivo direto deste vértice: ";
         cin >> no;
         graph->questaoA(no);
-
         break;
     }
     //Caminho mínimo entre dois vértices usando Dijkstra;
@@ -175,7 +179,6 @@ void selecionar(int selecao, Graph* graph, ofstream& output_file)
         cin >> noChegada;
         cout << endl << endl;
         cout << "tamanho do caminho usando o algoritimo de Dijkstra: "<< graph->dijkstra(noSaida,noChegada) << endl;
-
         break;
     }
 
@@ -189,9 +192,8 @@ void selecionar(int selecao, Graph* graph, ofstream& output_file)
     //AGM - Kruscal;
     case 4:
     {
-
-
-
+        Graph* g;
+        g = graph->agmKuskal();
         break;
     }
 
@@ -218,7 +220,6 @@ void selecionar(int selecao, Graph* graph, ofstream& output_file)
     case 10:
     {
         graph->imprimir();
-
         break;
     }
     default:

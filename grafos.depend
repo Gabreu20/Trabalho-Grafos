@@ -1,11 +1,11 @@
 # depslib dependency file v1.0
-1638983040 source:d:\github\grafos\edge.cpp
+1639811068 source:d:\github\grafos\edge.cpp
 	"Edge.h"
 	<iostream>
 
-1638983040 d:\github\grafos\edge.h
+1639811011 d:\github\grafos\edge.h
 
-1639756644 source:d:\github\grafos\graph.cpp
+1639813761 source:d:\github\grafos\graph.cpp
 	"Graph.h"
 	"Node.h"
 	"Edge.h"
@@ -21,22 +21,26 @@
 	<iomanip>
 	<iterator>
 	<limits>
+	<vector>
+	<algorithm>
+	<string.h>
 
-1639756509 d:\github\grafos\graph.h
+1639805134 d:\github\grafos\graph.h
 	"Node.h"
+	"Edge.h"
 	<fstream>
 	<stack>
 	<list>
 
-1639609700 d:\github\grafos\node.h
+1639805112 d:\github\grafos\node.h
 	"Edge.h"
 
-1638983040 source:d:\github\grafos\node.cpp
+1639811034 source:d:\github\grafos\node.cpp
 	"Node.h"
 	"Edge.h"
 	<iostream>
 
-1639756389 source:d:\github\grafos\main.cpp
+1639810869 source:d:\github\grafos\main.cpp
 	<iostream>
 	<fstream>
 	<string>

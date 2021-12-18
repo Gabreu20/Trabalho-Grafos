@@ -94,19 +94,20 @@ void Node::setWeight(float weight){
 }
 
 // Other methods
-void Node::insertEdge(int target_id, float weight){
+void Node::insertEdge(int id, int target_id, float weight, int id_edge){
     // Verifies whether there are at least one edge in the node
     if(this->first_edge != nullptr){
         // Allocating the new edge and keeping the integrity of the edge list
-        Edge* edge = new Edge(target_id);
+        Edge* edge = new Edge(target_id, id_edge);
         edge->setWeight(weight);
+        edge->setSource(id);
         this->last_edge->setNextEdge(edge);
         this->last_edge = edge;
-
     }
     else{
          // Allocating the new edge and keeping the integrity of the edge list
-        this->first_edge = new Edge(target_id);
+        this->first_edge = new Edge(target_id, id_edge);
+        this->first_edge->setSource(id);
         this->first_edge->setWeight(weight);
         this->last_edge = this->first_edge;
 

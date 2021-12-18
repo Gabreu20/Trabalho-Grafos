@@ -5,6 +5,7 @@
 #ifndef GRAPH_H_INCLUDED
 #define GRAPH_H_INCLUDED
 #include "Node.h"
+#include "Edge.h"
 #include <fstream>
 #include <stack>
 #include <list>
@@ -22,6 +23,7 @@ class Graph{
         bool weighted_node;
         Node* first_node;
         Node* last_node;
+        Edge* first_edge;
 
     public:
         //Constructor
@@ -36,12 +38,15 @@ class Graph{
         bool getWeightedNode();
         Node* getFirstNode();
         Node* getLastNode();
+        Edge* getFirstEdge();
         //Other methods
         void insertNode(int id);
-        void insertEdge(int id, int target_id, float weight);
+        void insertEdge(int id, int target_id, float weight, int id_edge);
         void removeNode(int id);
         bool searchNode(int id);
         Node* getNode(int id);
+        Edge* getEdge(int Source, int target);
+        void setFirstEdge(Edge *e);
 
         //methods phase1
         void topologicalSorting();

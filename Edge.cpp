@@ -8,8 +8,10 @@ using namespace std;
 **************************************************************************************************/
 
 // Constructor
-Edge::Edge(int target_id){
+Edge::Edge(int target_id, int Id){
 
+    this->Source = 1;
+    this->id = Id;
     this->target_id = target_id;
     this->next_edge = nullptr;
     this->weight = 0;
@@ -45,6 +47,10 @@ float Edge::getWeight(){
 
 }
 
+int Edge::getSource(){
+    return this->Source;
+}
+
 // Setters
 void Edge::setNextEdge(Edge* edge){
 
@@ -57,3 +63,13 @@ void Edge::setWeight(float weight){
     this->weight = weight;
 
 }
+
+void Edge::setSource(int source){
+    this->Source = source;
+}
+
+
+void Edge::setId(int id){
+    this->id = id;
+}
+

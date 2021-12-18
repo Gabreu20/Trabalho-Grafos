@@ -13,6 +13,9 @@
 #include <iomanip>
 #include <iterator>
 #include <limits>
+#include <vector>
+#include <algorithm> // sort
+#include <string.h> // memset
 
 using namespace std;
 
@@ -29,6 +32,7 @@ Graph::Graph(int order, bool directed, bool weighted_edge, bool weighted_node)
     this->weighted_edge = weighted_edge;
     this->weighted_node = weighted_node;
     this->first_node = this->last_node = nullptr;
+    this->first_edge = nullptr;
     this->number_edges = 0;
 }
 
@@ -51,7 +55,6 @@ Graph::~Graph()
 // Getters
 int Graph::getOrder()
 {
-
     return this->order;
 }
 int Graph::getNumberEdges()
@@ -79,7 +82,6 @@ bool Graph::getWeightedNode()
     return this->weighted_node;
 }
 
-
 Node *Graph::getFirstNode()
 {
 
@@ -90,6 +92,10 @@ Node *Graph::getLastNode()
 {
 
     return this->last_node;
+}
+
+Edge *Graph::getFirstEdge(){
+    return this->first_edge;
 }
 
 // Other methods
@@ -118,6 +124,7 @@ void Graph::imprimir()
             while(next_edge != nullptr)
             {
                 cout << " -> " << next_edge->getTargetId();
+                cout << " ID:" << next_edge->id;
                 next_edge = next_edge->getNextEdge();
             }
             cout << endl;
@@ -126,6 +133,11 @@ void Graph::imprimir()
         }
     }
 }
+
+void Graph::setFirstEdge(Edge *e){
+    this->first_edge = e;
+}
+
 void Graph::addNode(Node *Id)
 {
     Node *pecado = new Node(Id->getId());
@@ -169,7 +181,7 @@ void Graph::insertNode(int id)
     }
 }
 
-void Graph::insertEdge(int id, int target_id, float weight)
+void Graph::insertEdge(int id, int target_id, float weight, int id_edge)
 {
     if (this->first_node!=nullptr)
     {
@@ -181,7 +193,8 @@ void Graph::insertEdge(int id, int target_id, float weight)
             if(next_node->getId()==id)
             {
                 //addciona edge
-                next_node->insertEdge(target_id,weight);
+                this->number_edges++;
+                next_node->insertEdge(id,target_id,weight, id_edge);
                 next_node->incrementOutDegree();
                 Node* target = getNode(target_id);
                 target->incrementInDegree();
@@ -190,7 +203,6 @@ void Graph::insertEdge(int id, int target_id, float weight)
             next_node = next_node->getNextNode();
         }
     }
-
 }
 
 void Graph::removeNode(int id)
@@ -261,6 +273,19 @@ Node *Graph::getNode(int id)
         return nullptr;
     }
 
+}
+Edge *Graph::getEdge(int Source, int target){
+    Node *n = this->getFirstNode();
+    while(n != nullptr){
+        Edge *e = n->getFirstEdge();
+        while(e != nullptr){
+            if(e->getSource() == Source && e->getTargetId() == target)
+                return e;
+            e = e->getNextEdge();
+        }
+        n = n->next_node;
+    }
+    return nullptr;
 }
 
 
@@ -447,19 +472,44 @@ void Graph::topologicalSorting()
     }
     cout << "}";
 }
-void breadthFirstSearch(ofstream& output_file)
-{
 
-}
 Graph* getVertexInduced(int* listIdNodes)
 {
 
 }
 
-Graph* agmKuskal()
+Graph* Graph::agmKuskal()//PRECISA VERIRIFICAR SE FECHA CICLO AINDA
 {
+    vector<int> arestas;
+    Edge *edges[this->getNumberEdges()];
 
+    Node *n = this->getFirstNode();
+    int i = 0;
+    while(n != nullptr){
+        Edge *e = n->getFirstEdge();
+        while(e != nullptr){
+            arestas.push_back(e->getWeight());
+            edges[i] = e;
+            e = e->getNextEdge();
+            i++;
+        }
+        n = n->next_node;
+    }
+    sort(arestas.begin(), arestas.end());
+
+    for(int i = 0; i < arestas.size(); i++){
+        for(int j = 0; j < 10; j++){
+            if(arestas.at(i) == edges[j]->getWeight()){
+                cout << "|";
+                cout << edges[j]->getSource();
+                arestas.erase(arestas.begin() + i);
+                cout << "-" << edges[j]->getTargetId();
+                cout << "|";
+            }
+        }
+    }
 }
+
 Graph* agmPrim()
 {
 
