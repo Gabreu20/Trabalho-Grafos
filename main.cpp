@@ -31,7 +31,10 @@ Graph* leitura(ifstream& input_file, int directed, int weightedEdge, int weighte
     int edge_id = 1;
     if(!graph->getWeightedEdge() && !graph->getWeightedNode())
     {
-        cout << "1";
+        for(int i=0; i<order; i++)
+        {
+            graph->insertNode(i);
+        }
         while(input_file >> idNodeSource >> idNodeTarget)
         {
             graph->insertEdge(idNodeSource, idNodeTarget, 0, edge_id);
@@ -42,7 +45,6 @@ Graph* leitura(ifstream& input_file, int directed, int weightedEdge, int weighte
     else if(graph->getWeightedEdge() && !graph->getWeightedNode() )
     {
 
-        cout << 2;
         float edgeWeight;
         for(int i=0; i<order; i++)
         {
@@ -60,7 +62,10 @@ Graph* leitura(ifstream& input_file, int directed, int weightedEdge, int weighte
     else if(graph->getWeightedNode() && !graph->getWeightedEdge())
     {
 
-        cout << 3;
+        for(int i=0; i<order; i++)
+        {
+            graph->insertNode(i);
+        }
         float nodeSourceWeight, nodeTargetWeight;
 
         while(input_file >> idNodeSource >> nodeSourceWeight >> idNodeTarget >> nodeTargetWeight)
@@ -75,7 +80,10 @@ Graph* leitura(ifstream& input_file, int directed, int weightedEdge, int weighte
     }
     else if(graph->getWeightedNode() && graph->getWeightedEdge())
     {
-        cout << 4;
+        for(int i=0; i<order; i++)
+        {
+            graph->insertNode(i);
+        }
         float nodeSourceWeight, nodeTargetWeight, edgeWeight;
 
         while(input_file >> idNodeSource >> nodeSourceWeight >> idNodeTarget >> nodeTargetWeight)
@@ -143,9 +151,10 @@ int menu()
     cout << "[5] Árvore Geradora Mínima de Kruskal" << endl;
     cout << "[6] Imprimir caminhamento em largura" << endl;
     cout << "[7] Imprimir ordenacao topológica" << endl;
-    cout << "[8] Algoritmo Guloso" << endl;
+    cout << "[8] questao b" << endl;
     cout << "[9] Algoritmo Guloso Randomizado " << endl;
     cout << "[10] Imprimir Grafo"<< endl;
+    cout << "[11] Algoritmo Guloso" << endl;
     cout << "[0] Sair" << endl;
 
     cin >> selecao;
@@ -185,7 +194,13 @@ void selecionar(int selecao, Graph* graph, ofstream& output_file)
     //Caminho mínimo entre dois vértices usando Floyd;
     case 3:
     {
-
+        int noSaida,noChegada;
+        cout << "insira o id de saida: ";
+        cin >> noSaida;
+        cout << "insira o id de chegada: ";
+        cin >> noChegada;
+        cout << endl << endl;
+        cout << "tamanho do caminho usando o algoritimo de Floyd Marshall: "<< graph->floydMarshall(noSaida,noChegada) << endl;
         break;
     }
 
@@ -215,6 +230,11 @@ void selecionar(int selecao, Graph* graph, ofstream& output_file)
     {
         Graph* aux = graph;
         aux->topologicalSorting();
+        break;
+    }
+    case 8:{
+            graph->questaoB(4);
+            graph->imprimir();
         break;
     }
     case 10:
@@ -259,7 +279,7 @@ int main()
 {
     //int argc, char const *argv[]
     int argc=6;
-    char *argv[]= {"Bom","grafo_10.txt","output","0","1","0"};
+    char *argv[]= {"Bom","grafo_10.txt","output","1","1","0"};
 
     //Verificação se todos os parâmetros do programa foram entrados
     if (argc != 6)
@@ -289,26 +309,15 @@ int main()
 
 
     Graph* graph;
-    if(argv[3]!="0" && argv[4]!="0" && argv[5]!="0" )
+
+    if(input_file.is_open())
     {
-        graph = leituraInstancia(input_file, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]));
-        cout << "AFF";
+
+        graph = leitura(input_file, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]));
+
     }
-
-
     else
-    {
-        if(input_file.is_open())
-        {
-
-            graph = leitura(input_file, atoi(argv[3]), atoi(argv[4]), atoi(argv[5]));
-
-        }
-        else
-            cout << "Unable to open " << argv[1];
-    }
-
-
+        cout << "Unable to open " << argv[1];
 
     mainMenu(output_file, graph);
 

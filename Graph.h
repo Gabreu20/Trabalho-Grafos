@@ -39,30 +39,34 @@ class Graph{
         Node* getFirstNode();
         Node* getLastNode();
         Edge* getFirstEdge();
+        bool contemVetor(int vetor[],int tamanho,int valor);
         //Other methods
-        void insertNode(int id);
-        void insertEdge(int id, int target_id, float weight, int id_edge);
-        void removeNode(int id);
-        bool searchNode(int id);
-        Node* getNode(int id);
-        Edge* getEdge(int Source, int target);
-        void setFirstEdge(Edge *e);
+        void insertNode(int id);//insere um vértice
+        void insertEdge(int id, int target_id, float weight, int id_edge);//insere uma aresta
+        void removeNode(int id);//remove um vértice
+        bool searchNode(int id);//procura um vértice
+        Node* getNode(int id);//retorna um vértice(id)
+        Edge* getEdge(int Source, int target);//retorna uma aresta(id)
+        void setFirstEdge(Edge *e);//define o primeiro Edge
 
         //methods phase1
-        void topologicalSorting();
-        void breadthFirstSearch(ofstream& output_file);
+        void topologicalSorting();//faz a ordenação topológica de um determinado grafo
+        void breadthFirstSearch(ofstream& output_file);//faz a busca em largura em um grafo
         Graph* getVertexInduced(int* listIdNodes);
         Graph* questaoA(int id);
-        Graph* agmKuskal();
-        Graph* agmPrim();
-        float floydMarshall(int idSource, int idTarget);
-        float dijkstra(int idSource, int idTarget);
+        Graph* questaoB(int id);
+        void questaoBaux(int id,int vertices[],int *unidades);
+        Graph* agmKuskal();//encontra a Agm usando Kruskal
+        Graph* agmPrim();//encontra a Agm usando Prim
+        float floydMarshall(int idSource, int idTarget);//encontra o caminho mínimo entre 2 vértices
+        float dijkstra(int idSource, int idTarget);//encontra o caminho mínimo entre 2 vértices
 
         //methods phase1
         float greed();
         float greedRandom();
         float greedRactiveRandom();
-        void imprimir();
+        void imprimir();//imprime um grafo
+        void Saida();
 
     private:
         void dijkstraAux(int nos[],int tamanho,int remocao);

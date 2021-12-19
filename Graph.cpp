@@ -94,7 +94,8 @@ Node *Graph::getLastNode()
     return this->last_node;
 }
 
-Edge *Graph::getFirstEdge(){
+Edge *Graph::getFirstEdge()
+{
     return this->first_edge;
 }
 
@@ -124,7 +125,6 @@ void Graph::imprimir()
             while(next_edge != nullptr)
             {
                 cout << " -> " << next_edge->getTargetId();
-                cout << " ID:" << next_edge->id;
                 next_edge = next_edge->getNextEdge();
             }
             cout << endl;
@@ -134,7 +134,8 @@ void Graph::imprimir()
     }
 }
 
-void Graph::setFirstEdge(Edge *e){
+void Graph::setFirstEdge(Edge *e)
+{
     this->first_edge = e;
 }
 
@@ -183,24 +184,52 @@ void Graph::insertNode(int id)
 
 void Graph::insertEdge(int id, int target_id, float weight, int id_edge)
 {
-    if (this->first_node!=nullptr)
+    if(directed == 0)
     {
-        int achado=0;   // variavel que verifica se o indice ja foi achado
-
-        Node *next_node = this->first_node;
-        while (next_node != nullptr && achado==0 )
+        if (this->first_node!=nullptr)
         {
-            if(next_node->getId()==id)
+            int achado=0;   // variavel que verifica se o indice ja foi achado
+
+            Node *next_node = this->first_node;
+            while (next_node != nullptr && achado==0 )
             {
-                //addciona edge
-                this->number_edges++;
-                next_node->insertEdge(id,target_id,weight, id_edge);
-                next_node->incrementOutDegree();
-                Node* target = getNode(target_id);
-                target->incrementInDegree();
-                achado=1;
+                if(next_node->getId()==id)
+                {
+                    Node *aux = getNode(target_id);
+                    aux->insertEdge(target_id,id,weight,id_edge);
+                    //addciona edge
+                    this->number_edges++;
+                    next_node->insertEdge(id,target_id,weight, id_edge);
+                    next_node->incrementOutDegree();
+                    Node* target = getNode(target_id);
+                    target->incrementInDegree();
+                    achado=1;
+                }
+                next_node = next_node->getNextNode();
             }
-            next_node = next_node->getNextNode();
+        }
+    }
+    else if(directed == 1)
+    {
+        if (this->first_node!=nullptr)
+        {
+            int achado=0;   // variavel que verifica se o indice ja foi achado
+
+            Node *next_node = this->first_node;
+            while (next_node != nullptr && achado==0 )
+            {
+                if(next_node->getId()==id)
+                {
+                    //addciona edge
+                    this->number_edges++;
+                    next_node->insertEdge(id,target_id,weight, id_edge);
+                    next_node->incrementOutDegree();
+                    Node* target = getNode(target_id);
+                    target->incrementInDegree();
+                    achado=1;
+                }
+                next_node = next_node->getNextNode();
+            }
         }
     }
 }
@@ -274,11 +303,14 @@ Node *Graph::getNode(int id)
     }
 
 }
-Edge *Graph::getEdge(int Source, int target){
+Edge *Graph::getEdge(int Source, int target)
+{
     Node *n = this->getFirstNode();
-    while(n != nullptr){
+    while(n != nullptr)
+    {
         Edge *e = n->getFirstEdge();
-        while(e != nullptr){
+        while(e != nullptr)
+        {
             if(e->getSource() == Source && e->getTargetId() == target)
                 return e;
             e = e->getNextEdge();
@@ -319,25 +351,117 @@ Graph* Graph::questaoAaux(int id,Graph *graphAnswer)
     }
 
 }
+//QUESTAO B-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+bool Graph::contemVetor(int vetor[],int tamanho,int valor)
+{
+    for(int i=0;i<tamanho;i++){
+        if(valor==vetor[i])
+            return false;
+    }
+    return true;
+}
+Graph* Graph::questaoB(int id)
+{
+    int vertices[order];
+    int unidades = 1;
+    vertices[0]=id;
 
+    for(int i=0; i<unidades; i++)
+    {
+        questaoBaux(vertices[i],vertices,&unidades);
+    }
+
+    Graph *retorno=new Graph(order,directed,weighted_edge,weighted_node);
+
+    for(int i=0; i<unidades; i++)
+        retorno->insertNode(vertices[i]);
+
+
+    for(int i=0;i<unidades;i++)
+    {
+        Node *next_node=getNode(vertices[i]);
+
+
+
+        Edge *next_edge=next_node->getFirstEdge();
+
+
+        while(next_edge!=nullptr)
+        {
+
+            for(int j=0;j<unidades;j++){
+
+                if(vertices[j]==next_edge->getTargetId()){
+
+                    retorno->insertEdge(vertices[i],next_edge->getTargetId(),next_edge->getWeight(),0);
+                }
+            }
+
+            next_edge=next_edge->getNextEdge();
+        }
+    }
+
+    retorno->imprimir();
+
+    cout << endl;
+    cout << endl;
+    for(int i=0; i<unidades; i++)
+        cout << vertices [i] << " ";
+    cout << endl;
+
+    return retorno;
+}
+
+void Graph::questaoBaux(int id,int vertices[],int *unidades)
+{
+    Node *next_node=first_node;
+    Edge *next_edge=next_node->getFirstEdge();
+
+
+    for(int i=0; i<order; i++)
+    {
+        while(next_edge!=nullptr)
+        {
+            if(next_edge->getTargetId()==id && contemVetor(vertices,*unidades,next_node->getId()))
+            {
+
+                vertices[*unidades]=next_node->getId();
+
+                *unidades=*unidades+1;
+            }
+            next_edge=next_edge->getNextEdge();
+        }
+        if(i!=order-1)
+        {
+            next_node=next_node->getNextNode();
+            next_edge=next_node->getFirstEdge();
+        }
+    }
+}
+
+//FIM QUESTAO A E B-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 void Graph::breadthFirstSearch(ofstream &output_file)
 {
     Node *n = this->first_node;
     list<int> fila;
     fila.push_back(n->getId());
-    while(!fila.empty()){
+    while(!fila.empty())
+    {
 
         n = this->getNode(fila.front());
         fila.pop_front();
-        if(n->visitado == 0){
+        if(n->visitado == 0)
+        {
             cout << n->getId();
             output_file << n->getId();
             n->visitado = 1;
             Edge *e = n->getFirstEdge();
-            while(e != nullptr){
+            while(e != nullptr)
+            {
                 Node* target = getNode(e->getTargetId());
-                if(target->visitado == 0){
+                if(target->visitado == 0)
+                {
                     fila.push_back(target->getId());
                 }
                 e = e->getNextEdge();
@@ -352,8 +476,69 @@ void Graph::breadthFirstSearch(ofstream &output_file)
 float Graph::floydMarshall(int idSource, int idTarget)
 {
 
-}
+    float distancias[order][order];
+    for(int i=0; i<order; i++)
+    {
+        for(int j=0; j<order; j++)
+        {
+            distancias[i][j]=numeric_limits<float>::infinity();
+        }
+    }
+    for(int i=0; i<order; i++)
+    {
+        distancias[i][i]=0;
+    }
 
+    Node *next_node=first_node;
+    Edge *next_edge=next_node->getFirstEdge();
+
+    for(int i=0; i<order; i++)
+    {
+        for(int j=0; next_edge!=nullptr; j++)
+        {
+            distancias[next_node->getId()][next_edge->getTargetId()]=next_edge->getWeight();
+            next_edge=next_edge->getNextEdge();
+        }
+        if(i!=order-1)
+        {
+            next_node=next_node->getNextNode();
+            next_edge=next_node->getFirstEdge();
+        }
+    }
+
+    for(int k=0; k<order; k++)
+    {
+        for(int i=0; i<order; i++)
+        {
+
+            for(int j=0; j<order; j++)
+            {
+                if(distancias[i][j]>distancias[i][k]+distancias[k][j])
+                {
+                    distancias[i][j]=distancias[i][k]+distancias[k][j];
+
+                }
+
+            }
+        }
+    }
+
+
+
+    /*for(int i=0; i<order; i++)
+      {
+          for(int j=0; j<order; j++)
+          {
+              if(distancias[i][j]>30)
+                  cout << distancias[i][j] << " ";
+              else
+                  cout <<"00"<< distancias[i][j] << " ";
+          }
+          cout << endl;
+      }*/
+    return distancias[idSource][idTarget];
+
+}
 
 
 void Graph::dijkstraAux(int nos[],int tamanho,int remocao)
@@ -451,14 +636,18 @@ void Graph::topologicalSorting()
 {
     cout << endl;
     cout << "S = {";
-    for(int i = 0; i < this->getOrder(); i++){
+    for(int i = 0; i < this->getOrder(); i++)
+    {
         Node *next_node = this->first_node;
-        while(next_node != nullptr){
-            if(next_node->getInDegree() == 0){
+        while(next_node != nullptr)
+        {
+            if(next_node->getInDegree() == 0)
+            {
                 cout << next_node->getId();
                 next_node->decrementInDegree();
                 Edge *next_edge = next_node->getFirstEdge();
-                while(next_edge != nullptr){
+                while(next_edge != nullptr)
+                {
                     Node* target = getNode(next_edge->getTargetId());
                     target->decrementInDegree();
                     next_edge = next_edge->getNextEdge();
@@ -476,7 +665,7 @@ Graph* getVertexInduced(int* listIdNodes)
 
 }
 
-Graph* Graph::agmKuskal()//FUNCIONANDO XD
+Graph* Graph::agmKuskal()
 {
     vector<int> arestas;
     vector<int> nodes;
@@ -485,9 +674,11 @@ Graph* Graph::agmKuskal()//FUNCIONANDO XD
 
     Node *n = this->getFirstNode();
     int i = 0;
-    while(n != nullptr){
+    while(n != nullptr)
+    {
         Edge *e = n->getFirstEdge();
-        while(e != nullptr){
+        while(e != nullptr)
+        {
             arestas.push_back(e->getWeight());
             edges[i] = e;
             e = e->getNextEdge();
@@ -497,20 +688,12 @@ Graph* Graph::agmKuskal()//FUNCIONANDO XD
     }
     sort(arestas.begin(), arestas.end());
 
-    /*
-    for(int i = 0; i < this->number_edges; i++){
-        for(int j = 0; j < arestas.size(); j++){
-            if(edges[i]->getWeight() == arestas.at(j)){
-                nodes.push_back(edges[i]->getSource());
-                nodes.push_back(edges[i]->getTargetId());
-                arestas.erase(arestas.begin() + j);
-            }
-        }
-    }*/
-
-    for(int i = 0; i < number_edges; i++){
-        for(int j = 0; j < number_edges; j++){
-            if(edges[j]->getWeight() == arestas.at(0)){
+    for(int i = 0; i < number_edges; i++)
+    {
+        for(int j = 0; j < number_edges; j++)
+        {
+            if(edges[j]->getWeight() == arestas.at(0))
+            {
                 nodes.push_back(edges[j]->getSource());
                 nodes.push_back(edges[j]->getTargetId());
                 arestas.erase(arestas.begin());
@@ -530,28 +713,59 @@ Graph* Graph::agmKuskal()//FUNCIONANDO XD
         g->insertNode(i);
     }
 
+    //Verifica Ciclo -INICIO
     g->getFirstNode()->pai = g->getFirstNode()->getId();
 
     int j = 1;
-    for(int i = 0; i < nodes.size(); i = i + 2){
+    for(int i = 0; i < nodes.size(); i = i + 2)
+    {
         Node *pai = g->getNode(nodes.at(i));
         Node *filho = g->getNode(nodes.at(i+1));
-        if(filho->pai == -1){
+        if(filho->pai == -1)
+        {
             filho->pai = pai->pai;
             g->insertEdge(pai->getId(),filho->getId(),0,j);
         }
-        else{
-            if(filho->pai != pai->pai){
+        else
+        {
+            if(filho->pai != pai->pai)
+            {
                 filho->pai = pai->pai;
                 g->insertEdge(pai->getId(),filho->getId(),0,j);
             }
         }
         j++;
     }
+    //Verifica Ciclo -FINAL
     g->imprimir();
 }
 
 Graph* agmPrim()
 {
 
+}
+
+void Graph::Saida()
+{
+    string GraphTxt;
+    if(directed==1  )
+    {
+        GraphTxt=GraphTxt+"Digraph nome {"+'\n';
+    }
+
+    Node *next_node=first_node;
+    while(next_node!=nullptr)
+    {
+        Edge *next_edge=next_node->getFirstEdge();
+        while(next_edge!=nullptr)
+        {
+            GraphTxt=GraphTxt + to_string(next_node->getId()) + "->" + to_string(next_edge->getTargetId()) + ";" +'\n';
+            next_edge=next_edge->getNextEdge();
+        }
+        next_node=next_node->getNextNode();
+    }
+
+    GraphTxt=GraphTxt+'}';
+
+    cout << GraphTxt;
 }
