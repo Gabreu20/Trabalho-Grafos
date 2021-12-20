@@ -5,7 +5,7 @@
 
 1639811011 d:\github\grafos\edge.h
 
-1640015818 source:d:\github\grafos\graph.cpp
+1640017273 source:d:\github\grafos\graph.cpp
 	"Graph.h"
 	"Node.h"
 	"Edge.h"
@@ -25,7 +25,7 @@
 	<algorithm>
 	<string.h>
 
-1640015706 d:\github\grafos\graph.h
+1640016160 d:\github\grafos\graph.h
 	"Node.h"
 	"Edge.h"
 	<fstream>
@@ -40,7 +40,7 @@
 	"Edge.h"
 	<iostream>
 
-1640015741 source:d:\github\grafos\main.cpp
+1640018119 source:d:\github\grafos\main.cpp
 	<iostream>
 	<fstream>
 	<string>

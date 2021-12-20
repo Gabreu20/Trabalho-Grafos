@@ -207,24 +207,20 @@ void selecionar(int selecao, Graph* graph, ofstream& output_file)
     //AGM - Kruscal;
     case 5:
     {
-        cout << "Insira o Id do Vertice inicial" << endl;
-        int ID;
-        cin >> ID;
         Graph* g;
-        g = graph->agmKuskal(ID);
-        g->imprimir();
+        g = graph->agmKuskal(0);
+        //g->imprimir();
+        g->Saida();
         break;
     }
 
     //AGM Prim;
     case 4:
     {
-        cout << "Insira o Id do Vertice inicial" << endl;
-        int ID;
-        cin >> ID;
         Graph* g;
-        g = graph->agmPrim(ID);
-        g->imprimir();
+        g = graph->agmPrim(0);
+        //g->imprimir();
+        g->Saida();
         break;
     }
 
@@ -241,12 +237,12 @@ void selecionar(int selecao, Graph* graph, ofstream& output_file)
     case 7:
     {
         Graph* aux = graph;
-        aux->topologicalSorting();
+        aux->topologicalSorting(graph->getDirected());
         break;
     }
     case 8:{
-            graph->questaoB(4);
-            graph->imprimir();
+        graph->questaoB(4);
+        graph->imprimir();
         break;
     }
     case 10:

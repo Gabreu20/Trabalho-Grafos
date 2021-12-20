@@ -449,6 +449,7 @@ void Graph::breadthFirstSearch(ofstream &output_file, int id)
     Node *n = this->getNode(id);
     list<int> fila;
     fila.push_back(n->getId());
+    cout << "Caminhamento em Largura: {";
     while(!fila.empty())
     {
 
@@ -456,7 +457,7 @@ void Graph::breadthFirstSearch(ofstream &output_file, int id)
         fila.pop_front();
         if(n->visitado == 0)
         {
-            cout << n->getId();
+            cout << n->getId() << " ";
             output_file << n->getId();
             n->visitado = 1;
             Edge *e = n->getFirstEdge();
@@ -471,6 +472,7 @@ void Graph::breadthFirstSearch(ofstream &output_file, int id)
             }
         }
     }
+    cout << "}";
     cout << endl;
 }
 
@@ -635,32 +637,39 @@ float Graph::dijkstra(int idSource, int idTarget)
 }
 
 //function that prints a topological sorting
-void Graph::topologicalSorting()
+void Graph::topologicalSorting(bool dir)
 {
-    cout << endl;
-    cout << "S = {";
-    for(int i = 0; i < this->getOrder(); i++)
+    if(dir)
     {
-        Node *next_node = this->first_node;
-        while(next_node != nullptr)
+        cout << endl;
+        cout << "S = {";
+        for(int i = 0; i < this->getOrder(); i++)
         {
-            if(next_node->getInDegree() == 0)
+            Node *next_node = this->first_node;
+            while(next_node != nullptr)
             {
-                cout << next_node->getId();
-                next_node->decrementInDegree();
-                Edge *next_edge = next_node->getFirstEdge();
-                while(next_edge != nullptr)
+                if(next_node->getInDegree() == 0)
                 {
-                    Node* target = getNode(next_edge->getTargetId());
-                    target->decrementInDegree();
-                    next_edge = next_edge->getNextEdge();
+                    cout << next_node->getId();
+                    next_node->decrementInDegree();
+                    Edge *next_edge = next_node->getFirstEdge();
+                    while(next_edge != nullptr)
+                    {
+                        Node* target = getNode(next_edge->getTargetId());
+                        target->decrementInDegree();
+                        next_edge = next_edge->getNextEdge();
+                    }
                 }
-            }
 
-            next_node = next_node->next_node;
+                next_node = next_node->next_node;
+            }
         }
+        cout << "}" << endl;
     }
-    cout << "}";
+    else{
+        cout << "O grafo nao e direcionado!" << endl;
+    }
+
 }
 
 Graph* getVertexInduced(int* listIdNodes)
@@ -675,7 +684,7 @@ Graph* Graph::agmKuskal(int id)
 
     Edge *edges[this->getNumberEdges()];
 
-    Node *n = this->getNode(id);
+    Node *n = this->getFirstNode();
     int i = 0;
     while(n != nullptr)
     {
@@ -714,7 +723,7 @@ Graph* Graph::agmKuskal(int id)
     }
 
     //Verifica Ciclo -INICIO
-    g->getFirstNode()->pai = g->getFirstNode()->getId(); //define o pai do primeiro vértice como ele mesmo
+    g->getNode(id)->pai = id; //define o pai do primeiro vértice como ele mesmo
 
     int j = 1;
     cout << endl;

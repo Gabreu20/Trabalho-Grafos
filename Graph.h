@@ -50,7 +50,7 @@ class Graph{
         void setFirstEdge(Edge *e);//define o primeiro Edge
 
         //methods phase1
-        void topologicalSorting();//faz a ordenação topológica de um determinado grafo
+        void topologicalSorting(bool dir);//faz a ordenação topológica de um determinado grafo
         void breadthFirstSearch(ofstream& output_file, int id);//faz a busca em largura em um grafo
         Graph* getVertexInduced(int* listIdNodes);
         Graph* questaoA(int id);
