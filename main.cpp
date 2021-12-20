@@ -144,11 +144,11 @@ int menu()
 
     cout << "MENU" << endl;
     cout << "----" << endl;
-    cout << "[1] subgrafo vertice-induzido pelo fecho transitivo direto deste vértice." << endl;
+    cout << "[1] Subgrafo vertice-induzido pelo fecho transitivo direto deste vértice." << endl;
     cout << "[2] Caminho Mínimo entre dois vértices - Dijkstra" << endl;
     cout << "[3] Caminho Mínimo entre dois vértices - Floyd" << endl;
-    cout << "[4] Árvore Geradora Mínima de Prim" << endl;
-    cout << "[5] Árvore Geradora Mínima de Kruskal" << endl;
+    cout << "[4] Arvore Geradora Mínima de Prim" << endl;
+    cout << "[5] Arvore Geradora Mínima de Kruskal" << endl;
     cout << "[6] Imprimir caminhamento em largura" << endl;
     cout << "[7] Imprimir ordenacao topológica" << endl;
     cout << "[8] questao b" << endl;
@@ -207,8 +207,11 @@ void selecionar(int selecao, Graph* graph, ofstream& output_file)
     //AGM - Kruscal;
     case 5:
     {
+        cout << "Insira o Id do Vertice inicial" << endl;
+        int ID;
+        cin >> ID;
         Graph* g;
-        g = graph->agmKuskal();
+        g = graph->agmKuskal(ID);
         g->imprimir();
         break;
     }
@@ -216,8 +219,11 @@ void selecionar(int selecao, Graph* graph, ofstream& output_file)
     //AGM Prim;
     case 4:
     {
+        cout << "Insira o Id do Vertice inicial" << endl;
+        int ID;
+        cin >> ID;
         Graph* g;
-        g = graph->agmPrim();
+        g = graph->agmPrim(ID);
         g->imprimir();
         break;
     }
@@ -225,7 +231,10 @@ void selecionar(int selecao, Graph* graph, ofstream& output_file)
     //Busca em largura;
     case 6:
     {
-        graph->breadthFirstSearch(output_file);
+        cout << "Insira o Id do Vertice inicial" << endl;
+        int ID;
+        cin >> ID;
+        graph->breadthFirstSearch(output_file, ID);
         break;
     }
     //Ordenação Topologica;

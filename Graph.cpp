@@ -444,9 +444,9 @@ void Graph::questaoBaux(int id,int vertices[],int *unidades)
 
 //FIM QUESTAO A E B-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-void Graph::breadthFirstSearch(ofstream &output_file)
+void Graph::breadthFirstSearch(ofstream &output_file, int id)
 {
-    Node *n = this->first_node;
+    Node *n = this->getNode(id);
     list<int> fila;
     fila.push_back(n->getId());
     while(!fila.empty())
@@ -668,14 +668,14 @@ Graph* getVertexInduced(int* listIdNodes)
 
 }
 
-Graph* Graph::agmKuskal()
+Graph* Graph::agmKuskal(int id)
 {
     vector<int> arestas;
     vector<int> nodes;
 
     Edge *edges[this->getNumberEdges()];
 
-    Node *n = this->getFirstNode();
+    Node *n = this->getNode(id);
     int i = 0;
     while(n != nullptr)
     {
@@ -743,14 +743,14 @@ Graph* Graph::agmKuskal()
     return g;
 }
 
-Graph* Graph::agmPrim()
+Graph* Graph::agmPrim(int id)
 {
     vector<int> arestas;
     vector<int> nodes;
 
     Edge *edges[this->getNumberEdges()];
 
-    Node *n = this->getFirstNode();
+    Node *n = this->getNode(id);
     int i = 0;
     while(n != nullptr)
     {

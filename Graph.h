@@ -51,13 +51,13 @@ class Graph{
 
         //methods phase1
         void topologicalSorting();//faz a ordenação topológica de um determinado grafo
-        void breadthFirstSearch(ofstream& output_file);//faz a busca em largura em um grafo
+        void breadthFirstSearch(ofstream& output_file, int id);//faz a busca em largura em um grafo
         Graph* getVertexInduced(int* listIdNodes);
         Graph* questaoA(int id);
         Graph* questaoB(int id);
         void questaoBaux(int id,int vertices[],int *unidades);
-        Graph* agmKuskal();//encontra a Agm usando Kruskal
-        Graph* agmPrim();//encontra a Agm usando Prim
+        Graph* agmKuskal(int id);//encontra a Agm usando Kruskal
+        Graph* agmPrim(int id);//encontra a Agm usando Prim
         float floydMarshall(int idSource, int idTarget);//encontra o caminho mínimo entre 2 vértices
         float dijkstra(int idSource, int idTarget);//encontra o caminho mínimo entre 2 vértices
 
