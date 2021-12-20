@@ -354,7 +354,8 @@ Graph* Graph::questaoAaux(int id,Graph *graphAnswer)
 //QUESTAO B-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 bool Graph::contemVetor(int vetor[],int tamanho,int valor)
 {
-    for(int i=0;i<tamanho;i++){
+    for(int i=0; i<tamanho; i++)
+    {
         if(valor==vetor[i])
             return false;
     }
@@ -377,7 +378,7 @@ Graph* Graph::questaoB(int id)
         retorno->insertNode(vertices[i]);
 
 
-    for(int i=0;i<unidades;i++)
+    for(int i=0; i<unidades; i++)
     {
         Node *next_node=getNode(vertices[i]);
 
@@ -389,9 +390,11 @@ Graph* Graph::questaoB(int id)
         while(next_edge!=nullptr)
         {
 
-            for(int j=0;j<unidades;j++){
+            for(int j=0; j<unidades; j++)
+            {
 
-                if(vertices[j]==next_edge->getTargetId()){
+                if(vertices[j]==next_edge->getTargetId())
+                {
 
                     retorno->insertEdge(vertices[i],next_edge->getTargetId(),next_edge->getWeight(),0);
                 }
@@ -703,10 +706,82 @@ Graph* Graph::agmKuskal()
         }
     }
 
-    Graph *g = new Graph(order,directed,weighted_edge,weighted_node);
+    Graph *g = new Graph(order,directed,weighted_edge,weighted_node); //cria um grafo para ser a arvore
 
-    for(int x : nodes)
-        cout << x << " ";
+    for(int i=0; i<order; i++) //insere todos os nós no novo grafo
+    {
+        g->insertNode(i);
+    }
+
+    //Verifica Ciclo -INICIO
+    g->getFirstNode()->pai = g->getFirstNode()->getId(); //define o pai do primeiro vértice como ele mesmo
+
+    int j = 1;
+    cout << endl;
+    for(int i = 0; i < nodes.size(); i = i + 2)
+    {
+        Node *pai = g->getNode(nodes.at(i));
+        Node *filho = g->getNode(nodes.at(i+1));
+        if(filho->pai == -1) //verifica se o filho ainda nao foi apadrinhado
+        {
+            filho->pai = pai->pai;
+            g->insertEdge(pai->getId(),filho->getId(),0,j);
+            cout << "ADD: |" << nodes.at(i) << "-" << nodes.at(i+1) << endl;
+        }
+        else
+        {
+            if(filho->pai != pai->pai) //verifica se são apadrinhados por diferentes vértices
+            {
+                filho->pai = pai->pai;
+                g->insertEdge(pai->getId(),filho->getId(),0,j);
+                cout << "ADD: |" << nodes.at(i) << "-" << nodes.at(i+1) << endl;
+            }
+        }
+        j++;
+    }
+    //Verifica Ciclo -FINAL
+    return g;
+}
+
+Graph* Graph::agmPrim()
+{
+    vector<int> arestas;
+    vector<int> nodes;
+
+    Edge *edges[this->getNumberEdges()];
+
+    Node *n = this->getFirstNode();
+    int i = 0;
+    while(n != nullptr)
+    {
+        Edge *e = n->getFirstEdge();
+        while(e != nullptr)
+        {
+            arestas.push_back(e->getWeight());
+            edges[i] = e;
+            e = e->getNextEdge();
+            i++;
+        }
+        n = n->next_node;
+    }
+    sort(arestas.begin(), arestas.end());
+
+    for(int i = 0; i < number_edges; i++)
+    {
+        for(int j = 0; j < number_edges; j++)
+        {
+            if(edges[j]->getWeight() == arestas.at(0))
+            {
+                nodes.push_back(edges[j]->getSource());
+                nodes.push_back(edges[j]->getTargetId());
+                arestas.erase(arestas.begin());
+                if(arestas.size() == 0)
+                    arestas.push_back(0);
+            }
+        }
+    }
+
+    Graph *g = new Graph(order,directed,weighted_edge,weighted_node);
 
     for(int i=0; i<order; i++)
     {
@@ -715,34 +790,41 @@ Graph* Graph::agmKuskal()
 
     //Verifica Ciclo -INICIO
     g->getFirstNode()->pai = g->getFirstNode()->getId();
+    g->getFirstNode()->agmVisit = 1;
 
-    int j = 1;
-    for(int i = 0; i < nodes.size(); i = i + 2)
+    cout << endl;
+    for(int j = 0; j < this->getNumberEdges(); j++)
     {
-        Node *pai = g->getNode(nodes.at(i));
-        Node *filho = g->getNode(nodes.at(i+1));
-        if(filho->pai == -1)
+        for(int i = 0; i < nodes.size(); i = i + 2)
         {
-            filho->pai = pai->pai;
-            g->insertEdge(pai->getId(),filho->getId(),0,j);
-        }
-        else
-        {
-            if(filho->pai != pai->pai)
+            if(g->getNode(nodes.at(i))->agmVisit == 1)
             {
-                filho->pai = pai->pai;
-                g->insertEdge(pai->getId(),filho->getId(),0,j);
+                Node *pai = g->getNode(nodes.at(i));
+                Node *filho = g->getNode(nodes.at(i+1));
+                if(filho->pai == -1)
+                {
+                    filho->pai = pai->pai;
+                    g->getNode(nodes.at(i+1))->agmVisit = 1;
+                    g->insertEdge(nodes.at(i), nodes.at(i+1), 0,0);
+                    cout << "ADD: |" << nodes.at(i) << "-" << nodes.at(i+1) << endl;
+                    break;
+                }
+                else
+                {
+                    if(filho->pai != pai->pai)
+                    {
+                        filho->pai = pai->pai;
+                        g->getNode(nodes.at(i+1))->agmVisit = 1;
+                        g->insertEdge(nodes.at(i), nodes.at(i+1), 0,0);
+                        cout << "ADD: |" << nodes.at(i) << "-" << nodes.at(i+1) << endl;
+                        break;
+                    }
+                }
             }
         }
-        j++;
     }
     //Verifica Ciclo -FINAL
-    g->imprimir();
-}
-
-Graph* agmPrim()
-{
-
+    return g;
 }
 
 void Graph::Saida()

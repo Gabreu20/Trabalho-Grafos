@@ -25,6 +25,7 @@ class Node{
         unsigned int out_degree;
         float weight;
         int visitado = 0;
+        int agmVisit = 0;
         Node* next_node;
 
 

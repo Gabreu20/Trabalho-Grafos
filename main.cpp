@@ -205,17 +205,20 @@ void selecionar(int selecao, Graph* graph, ofstream& output_file)
     }
 
     //AGM - Kruscal;
-    case 4:
+    case 5:
     {
         Graph* g;
         g = graph->agmKuskal();
+        g->imprimir();
         break;
     }
 
     //AGM Prim;
-    case 5:
+    case 4:
     {
-
+        Graph* g;
+        g = graph->agmPrim();
+        g->imprimir();
         break;
     }
 
