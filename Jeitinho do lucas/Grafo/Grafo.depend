@@ -1,0 +1,111 @@
+# depslib dependency file v1.0
+1640019091 source:c:\users\user\desktop\grafos\grafo\main.cpp
+	<iostream>
+	<fstream>
+	<string>
+	<math.h>
+	<utility>
+	<tuple>
+	<iomanip>
+	<stdlib.h>
+	<chrono>
+	"Graph.h"
+	"Node.h"
+	<limits>
+
+1640018494 c:\users\user\desktop\grafos\grafo\include\graph.h
+	"Node.h"
+	"Edge.h"
+	<fstream>
+	<stack>
+	<list>
+
+1640016143 c:\users\user\desktop\grafos\grafo\include\node.h
+	"Edge.h"
+
+1640016143 c:\users\user\desktop\grafos\grafo\include\edge.h
+
+1640016162 source:c:\users\user\desktop\grafos\grafo\src\edge.cpp
+	"Edge.h"
+	<iostream>
+
+1640016143 source:c:\users\user\desktop\grafos\grafo\src\node.cpp
+	"Node.h"
+	"Edge.h"
+	<iostream>
+
+1640018494 source:c:\users\user\desktop\grafos\grafo\src\graph.cpp
+	"Graph.h"
+	"Node.h"
+	"Edge.h"
+	<iostream>
+	<fstream>
+	<stack>
+	<queue>
+	<list>
+	<math.h>
+	<cstdlib>
+	<ctime>
+	<float.h>
+	<iomanip>
+	<iterator>
+	<limits>
+	<vector>
+	<algorithm>
+	<string.h>
+
+1640016162 source:c:\users\user\desktop\nova pasta (3)\grafos\grafo\src\edge.cpp
+	"Edge.h"
+	<iostream>
+
+1640016143 c:\users\user\desktop\nova pasta (3)\grafos\grafo\include\edge.h
+
+1640031799 source:c:\users\user\desktop\nova pasta (3)\grafos\grafo\src\graph.cpp
+	"Graph.h"
+	"Node.h"
+	"Edge.h"
+	<iostream>
+	<fstream>
+	<stack>
+	<queue>
+	<list>
+	<math.h>
+	<cstdlib>
+	<ctime>
+	<float.h>
+	<iomanip>
+	<iterator>
+	<limits>
+	<vector>
+	<algorithm>
+	<string.h>
+
+1640035308 c:\users\user\desktop\nova pasta (3)\grafos\grafo\include\graph.h
+	"Node.h"
+	"Edge.h"
+	<fstream>
+	<stack>
+	<list>
+
+1640031362 c:\users\user\desktop\nova pasta (3)\grafos\grafo\include\node.h
+	"Edge.h"
+
+1640016143 source:c:\users\user\desktop\nova pasta (3)\grafos\grafo\src\node.cpp
+	"Node.h"
+	"Edge.h"
+	<iostream>
+
+1640034275 source:c:\users\user\desktop\nova pasta (3)\grafos\grafo\main.cpp
+	<iostream>
+	<fstream>
+	<string>
+	<math.h>
+	<utility>
+	<tuple>
+	<iomanip>
+	<stdlib.h>
+	<chrono>
+	"Graph.h"
+	"Node.h"
+	<limits>
+
